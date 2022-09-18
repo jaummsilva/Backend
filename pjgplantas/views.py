@@ -1,6 +1,6 @@
 from django.shortcuts import render
-
 from rest_framework.viewsets import ModelViewSet
+from django.contrib.auth.models import User
 
 from pjgplantas.models import (
     Boleto,
@@ -23,9 +23,15 @@ from pjgplantas.serializers import (
     PedidoSerializer,
     PixSerializer,
     PlantaSerializer,
+    RegistrationSerializer,
     TipoUsuarioSerializer,
     UsuarioSerializer,
 )
+
+
+class RegistrationViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = RegistrationSerializer
 
 
 class TipoUsuarioViewSet(ModelViewSet):
