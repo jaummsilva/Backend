@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class TipoUsuario(models.Model):
@@ -26,7 +27,6 @@ class Planta(models.Model):
     preco = models.DecimalField(max_digits=8, decimal_places=2)
     nome = models.CharField(max_length=100)
     desc = models.TextField(max_length=500)
-    usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.nome
