@@ -1,9 +1,16 @@
 from django.contrib import admin
 
-from pjgplantas.models import Boleto, Cartao, Comentario, ItensCarrinho, Midia, PedidoCarrinho, Pix, Planta, TipoUsuario, Usuario
+from pjgplantas.models import (
+    Boleto,
+    Cartao,
+    Comentario,
+    ItensCarrinho,
+    Midia,
+    PedidoCarrinho,
+    Pix,
+    Planta,
+)
 
-admin.site.register(Usuario)
-admin.site.register(TipoUsuario)
 admin.site.register(Planta)
 admin.site.register(Boleto)
 admin.site.register(Cartao)

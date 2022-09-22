@@ -33,13 +33,9 @@ from pjgplantas.views import (
     PixViewSet,
     PlantaViewSet,
     RegistrationViewSet,
-    TipoUsuarioViewSet,
-    UsuarioViewSet,
 )
 
 router = DefaultRouter()
-router.register(r"tiposusuarios", TipoUsuarioViewSet)
-router.register(r"usuarios", UsuarioViewSet)
 router.register(r"plantas", PlantaViewSet)
 router.register(r"boletos", BoletoViewSet)
 router.register(r"cartaos", CartaoViewSet)
@@ -48,7 +44,7 @@ router.register(r"pedidos", PedidoViewSet)
 router.register(r"itens", ItensCarrinhoViewSet)
 router.register(r"comentarios", ComentarioViewSet)
 router.register(r"midias", MidiaViewSet)
-router.register(r'auth', RegistrationViewSet)
+router.register(r"auth", RegistrationViewSet)
 
 
 urlpatterns = [

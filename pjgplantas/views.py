@@ -11,8 +11,6 @@ from pjgplantas.models import (
     PedidoCarrinho,
     Pix,
     Planta,
-    TipoUsuario,
-    Usuario,
 )
 from pjgplantas.serializers import (
     BoletoSerializer,
@@ -24,24 +22,12 @@ from pjgplantas.serializers import (
     PixSerializer,
     PlantaSerializer,
     RegistrationSerializer,
-    TipoUsuarioSerializer,
-    UsuarioSerializer,
 )
 
 
 class RegistrationViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = RegistrationSerializer
-
-
-class TipoUsuarioViewSet(ModelViewSet):
-    queryset = TipoUsuario.objects.all()
-    serializer_class = TipoUsuarioSerializer
-
-
-class UsuarioViewSet(ModelViewSet):
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
 
 
 class PlantaViewSet(ModelViewSet):
