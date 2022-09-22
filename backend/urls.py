@@ -18,7 +18,7 @@ from django.urls import include, path
 
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
+    # TokenObtainPairView,
     TokenRefreshView,
 )
 
@@ -33,6 +33,7 @@ from pjgplantas.views import (
     PixViewSet,
     PlantaViewSet,
     RegistrationViewSet,
+    MyTokenObtainPairView
 )
 
 router = DefaultRouter()
@@ -50,6 +51,6 @@ router.register(r"auth", RegistrationViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include(router.urls)),
-    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
