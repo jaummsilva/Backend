@@ -83,8 +83,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "pjgplantasback",
-        "USER": "aluno",
-        "PASSWORD": "aluno",
+        "USER": "root",
+        "PASSWORD": "Jaumm#99",
         "HOST": "localhost",
         "PORT": "3306",
     }
@@ -139,6 +139,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
-    # "DEFAULT_AUTHENTICATION_CLASSES": [
-    # "rest_framework_simplejwt.authentication.JWTAuthentication"],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }

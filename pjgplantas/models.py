@@ -42,9 +42,12 @@ class PedidoCarrinho(models.Model):
     valor = models.DecimalField(max_digits=9, decimal_places=2)
     quantidade_itens = models.IntegerField()
     dth = models.DateTimeField()
-    boleto1 = models.ForeignKey(Boleto, on_delete=models.PROTECT, blank=True, null=True)
-    cartao1 = models.ForeignKey(Cartao, on_delete=models.PROTECT, blank=True, null=True)
-    pix = models.ForeignKey(Pix, on_delete=models.PROTECT, blank=True, null=True)
+    boleto1 = models.ForeignKey(
+        Boleto, on_delete=models.PROTECT, blank=True, null=True)
+    cartao1 = models.ForeignKey(
+        Cartao, on_delete=models.PROTECT, blank=True, null=True)
+    pix = models.ForeignKey(
+        Pix, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return f"{self.pedido} ({self.valor})"
@@ -62,12 +65,14 @@ class ItensCarrinho(models.Model):
 
 
 class Comentario(models.Model):
-    texto = models.TextField(max_length=500)
+    texto = models.TextField()
     dth = models.DateTimeField()
-    comentario2 = models.ForeignKey(Planta, on_delete=models.PROTECT)
+    comentario2 = models.ForeignKey(User, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.comentario2
 
 
 class Midia(models.Model):
     local = models.ImageField()
     titulo = models.CharField(max_length=150)
-    planta = models.ForeignKey(Planta, on_delete=models.PROTECT)
