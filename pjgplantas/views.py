@@ -7,7 +7,6 @@ from pjgplantas.models import (
     Cartao,
     Comentario,
     ItensCarrinho,
-    Midia,
     PedidoCarrinho,
     Pix,
     Planta,
@@ -17,7 +16,6 @@ from pjgplantas.serializers import (
     CartaoSerializer,
     ComentarioSerializer,
     ItensCarrinhoSerializer,
-    MidiaSerializer,
     PedidoSerializer,
     PixSerializer,
     PlantaSerializer,
@@ -81,7 +79,3 @@ class ComentarioViewSet(ModelViewSet):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
 
-
-class MidiaViewSet(ModelViewSet):
-    queryset = Midia.objects.all()
-    serializer_class = MidiaSerializer

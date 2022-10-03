@@ -5,10 +5,9 @@ from pjgplantas.models import (
     Cartao,
     Comentario,
     ItensCarrinho,
-    Midia,
     PedidoCarrinho,
     Pix,
-    Planta,
+    Planta
 )
 
 admin.site.register(Planta)
@@ -18,4 +17,4 @@ admin.site.register(Pix)
 admin.site.register(PedidoCarrinho)
 admin.site.register(ItensCarrinho)
 admin.site.register(Comentario)
-admin.site.register(Midia)
+

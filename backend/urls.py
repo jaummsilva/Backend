@@ -15,6 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from media.router import router as media_router
+from django.conf import settings
+from django.conf.urls.static import static
+path("api/media/", include(media_router.urls)),
 
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
@@ -28,7 +32,6 @@ from pjgplantas.views import (
     CartaoViewSet,
     ComentarioViewSet,
     ItensCarrinhoViewSet,
-    MidiaViewSet,
     PedidoViewSet,
     PixViewSet,
     PlantaViewSet,
@@ -44,7 +47,6 @@ router.register(r"pixs", PixViewSet)
 router.register(r"pedidos", PedidoViewSet)
 router.register(r"itens", ItensCarrinhoViewSet)
 router.register(r"comentarios", ComentarioViewSet)
-router.register(r"midias", MidiaViewSet)
 router.register(r"auth", RegistrationViewSet)
 
 
@@ -54,3 +56,5 @@ urlpatterns = [
     path("token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
+
+urlpatterns += static(settings.MEDIA_ENDPOINT, document_root=settings.MEDIA_ROOT)

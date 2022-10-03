@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from media.models import Image
 
 
 class Planta(models.Model):
@@ -7,6 +8,14 @@ class Planta(models.Model):
     preco = models.DecimalField(max_digits=8, decimal_places=2)
     nome = models.CharField(max_length=100)
     desc = models.TextField(max_length=500)
+    imagem = models.ForeignKey(
+        Image,
+        related_name="+",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        default=None,
+    )
 
     def __str__(self):
         return self.nome
@@ -72,7 +81,3 @@ class Comentario(models.Model):
     def __str__(self):
         return self.comentario2
 
-
-class Midia(models.Model):
-    local = models.ImageField()
-    titulo = models.CharField(max_length=150)

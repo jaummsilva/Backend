@@ -1,11 +1,12 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer,  SlugRelatedField
 from rest_framework import serializers
+from media.models import Image
+from media.serializers import ImageSerializer
 from pjgplantas.models import (
     Boleto,
     Cartao,
     Comentario,
     ItensCarrinho,
-    Midia,
     PedidoCarrinho,
     Pix,
     Planta,
@@ -63,6 +64,15 @@ class PlantaSerializer(ModelSerializer):
     class Meta:
         model = Planta
         fields = "__all__"
+    
+    imagem_attachment_key = SlugRelatedField(
+        source="capa",
+        queryset=Image.objects.all(),
+        slug_field="attachment_key",
+        required=False,
+        write_only=True,
+    )
+    imagem = ImageSerializer(required=False, read_only=True)
 
 
 class BoletoSerializer(ModelSerializer):
@@ -98,10 +108,4 @@ class ItensCarrinhoSerializer(ModelSerializer):
 class ComentarioSerializer(ModelSerializer):
     class Meta:
         model = Comentario
-        fields = "__all__"
-
-
-class MidiaSerializer(ModelSerializer):
-    class Meta:
-        model = Midia
         fields = "__all__"
