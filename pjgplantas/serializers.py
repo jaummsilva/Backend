@@ -109,3 +109,9 @@ class ComentarioSerializer(ModelSerializer):
     class Meta:
         model = Comentario
         fields = "__all__"
+
+class ComentarioDetailSerializer(ModelSerializer):
+    class Meta:
+        model = Comentario
+        fields = "__all__"
+        depth = 1

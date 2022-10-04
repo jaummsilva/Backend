@@ -79,5 +79,5 @@ class Comentario(models.Model):
     comentario2 = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.comentario2
+        return self.user.username
 
