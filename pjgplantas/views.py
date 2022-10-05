@@ -45,6 +45,9 @@ class RegistrationViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = RegistrationSerializer
 
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
 
 class PlantaViewSet(ModelViewSet):
     queryset = Planta.objects.all()
