@@ -33,6 +33,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         data['username'] = self.user.username
         data['email'] = self.user.email
+        data['id'] = self.user.id
 
         return data
 

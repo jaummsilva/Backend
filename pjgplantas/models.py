@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from media.models import Image
+from django.utils import timezone
 
 
 class Planta(models.Model):
@@ -75,9 +76,10 @@ class ItensCarrinho(models.Model):
 
 class Comentario(models.Model):
     texto = models.TextField()
-    dth = models.DateTimeField()
-    comentario2 = models.ForeignKey(User, on_delete=models.PROTECT)
+    dth = models.DateTimeField(default=timezone.now)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT)
+    planta = models.ForeignKey(Planta,on_delete=models.PROTECT )
 
     def __str__(self):
-        return self.user.username
+        return self.planta
 
