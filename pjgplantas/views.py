@@ -33,8 +33,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         data['username'] = self.user.username
         data['email'] = self.user.email
-        data['id'] = self.user.id
-
+        data['first_name'] = self.user.id
+        data['last_name'] = self.user.id
         return data
 
 
