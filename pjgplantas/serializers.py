@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer,  SlugRelatedField
+from rest_framework.serializers import ModelSerializer, SlugRelatedField
 from rest_framework import serializers
 from media.models import Image
 from media.serializers import ImageSerializer
@@ -19,8 +19,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=50, min_length=6)
     username = serializers.CharField(max_length=50, min_length=6)
     password = serializers.CharField(max_length=150, write_only=True)
-    password_confirmation = serializers.CharField(
-        max_length=150, write_only=True)
+    password_confirmation = serializers.CharField(max_length=150, write_only=True)
 
     class Meta:
         model = User
@@ -44,11 +43,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 {"password": ("passwords does not match")}
             )
         if User.objects.filter(email=email).exists():
-            raise serializers.ValidationError(
-                {"email": ("email already exists")})
+            raise serializers.ValidationError({"email": ("email already exists")})
         if User.objects.filter(username=username).exists():
-            raise serializers.ValidationError(
-                {"username": ("username already exists")})
+            raise serializers.ValidationError({"username": ("username already exists")})
 
         return super().validate(args)
 
@@ -64,7 +61,7 @@ class PlantaSerializer(ModelSerializer):
     class Meta:
         model = Planta
         fields = "__all__"
-    
+
     imagem_attachment_key = SlugRelatedField(
         source="capa",
         queryset=Image.objects.all(),
@@ -108,10 +105,11 @@ class ItensCarrinhoSerializer(ModelSerializer):
 class ComentarioSerializer(ModelSerializer):
     class Meta:
         model = Comentario
-        fields = "__all__"
+        fields = ("texto", "usuario", "planta")
+
 
 class ComentarioDetailSerializer(ModelSerializer):
     class Meta:
         model = Comentario
-        fields = "__all__"
+        fields = ("texto", "usuario", "planta")
         depth = 1
