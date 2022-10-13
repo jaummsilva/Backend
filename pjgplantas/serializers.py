@@ -33,7 +33,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             "password_confirmation",
         )
 
-    def validate(self, args):
+    def validate(self, args, request):
         email = args.get("email", None)
         username = args.get("username", None)
         password = args.get("password")
@@ -42,12 +42,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"password": ("passwords does not match")}
             )
-        if User.objects.filter(email=email).exists():
-            raise serializers.ValidationError({"email": ("email already exists")})
-        if User.objects.filter(username=username).exists():
-            raise serializers.ValidationError({"username": ("username already exists")})
+        if request.method == "POST":
+            if User.objects.filter(email=email).exists(request):
+                raise serializers.ValidationError({"email": ("email already exists")})
+            if User.objects.filter(username=username).exists(request):
+                raise serializers.ValidationError(
+                    {"username": ("username already exists")}
+                )
 
-        return super().validate(args)
+        return super().validate(args, request)
 
     def create(self, validated_data):
         validated_data.pop("password_confirmation")
@@ -55,6 +58,26 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def get_short_name(self):
         return self.first_name
+
+
+class RegistrationDetailSerializer(serializers.ModelSerializer):
+
+    email = serializers.EmailField(max_length=50, min_length=6)
+    username = serializers.CharField(max_length=50, min_length=6)
+    password = serializers.CharField(max_length=150, write_only=True)
+    password_confirmation = serializers.CharField(max_length=150, write_only=True)
+
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "username",
+            "password",
+            "password_confirmation",
+        )
 
 
 class PlantaSerializer(ModelSerializer):
