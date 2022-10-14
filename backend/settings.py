@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "media",
     "pjgplantas",
 ]
@@ -54,8 +55,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware"
-    ]
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+]
 
 ROOT_URLCONF = "backend.urls"
 
@@ -87,7 +88,6 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 
 
 # Password validation
@@ -142,4 +142,11 @@ REST_FRAMEWORK = {
     # 'DEFAULT_AUTHENTICATION_CLASSES': (
     #    'rest_framework_simplejwt.authentication.JWTAuthentication',
     # )
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Pjg Plantas",
+    "DESCRIPTION": "API para gerenciamento da loja Pjg Plantas, incluindo endpoints e documentação.",
+    "VERSION": "1.0.0",
 }
