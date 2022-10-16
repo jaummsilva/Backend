@@ -1,3 +1,4 @@
+from pyexpat import model
 from rest_framework.serializers import ModelSerializer, SlugRelatedField
 from rest_framework import serializers
 from media.models import Image
@@ -103,6 +104,12 @@ class ItensCarrinhoSerializer(ModelSerializer):
 
 
 class ComentarioSerializer(ModelSerializer):
+    class Meta:
+        model = Comentario
+        fields = ("texto", "usuario", "planta")
+
+
+class ComentarioDetailSerializer(ModelSerializer):
     class Meta:
         model = Comentario
         fields = ("texto", "usuario", "planta")

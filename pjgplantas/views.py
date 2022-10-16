@@ -20,6 +20,8 @@ from pjgplantas.serializers import (
     PixSerializer,
     PlantaSerializer,
     RegistrationSerializer,
+    ComentarioDetailSerializer
+
 )
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -31,8 +33,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         data["username"] = self.user.username
         data["email"] = self.user.email
-        data["first_name"] = self.user.id
-        data["last_name"] = self.user.id
+        data["first_name"] = self.user.first_name
+        data["last_name"] = self.user.last_name
+        data["id"] = self.user.id
+
         return data
 
 
@@ -77,4 +81,8 @@ class ItensCarrinhoViewSet(ModelViewSet):
 
 class ComentarioViewSet(ModelViewSet):
     queryset = Comentario.objects.all()
-    serializer_class = ComentarioSerializer
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return ComentarioDetailSerializer
+        return ComentarioSerializer

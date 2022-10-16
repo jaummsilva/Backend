@@ -79,3 +79,6 @@ class Comentario(models.Model):
     dth = models.DateTimeField(default=timezone.now)
     usuario = models.ForeignKey(User, on_delete=models.PROTECT)
     planta = models.ForeignKey(Planta, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.usuario} ({self.planta})"
