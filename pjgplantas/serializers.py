@@ -106,11 +106,11 @@ class ItensCarrinhoSerializer(ModelSerializer):
 class ComentarioSerializer(ModelSerializer):
     class Meta:
         model = Comentario
-        fields = ("texto", "usuario", "planta")
+        fields = ("id","texto", "usuario", "planta")
 
 
 class ComentarioDetailSerializer(ModelSerializer):
     class Meta:
         model = Comentario
-        fields = ("texto", "usuario", "planta")
+        fields = ("id","texto", "usuario", "planta")
         depth = 1
