@@ -52,12 +52,9 @@ class PedidoCarrinho(models.Model):
     valor = models.DecimalField(max_digits=9, decimal_places=2)
     quantidade_itens = models.IntegerField()
     dth = models.DateTimeField()
-    boleto1 = models.ForeignKey(
-        Boleto, on_delete=models.PROTECT, blank=True, null=True)
-    cartao1 = models.ForeignKey(
-        Cartao, on_delete=models.PROTECT, blank=True, null=True)
-    pix = models.ForeignKey(
-        Pix, on_delete=models.PROTECT, blank=True, null=True)
+    boleto1 = models.ForeignKey(Boleto, on_delete=models.PROTECT, blank=True, null=True)
+    cartao1 = models.ForeignKey(Cartao, on_delete=models.PROTECT, blank=True, null=True)
+    pix = models.ForeignKey(Pix, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return f"{self.pedido} ({self.valor})"
@@ -78,7 +75,9 @@ class Comentario(models.Model):
     texto = models.TextField()
     dth = models.DateTimeField(default=timezone.now)
     usuario = models.ForeignKey(User, on_delete=models.PROTECT)
-    planta = models.ForeignKey(Planta, on_delete=models.PROTECT)
+    planta = models.ForeignKey(
+        Planta, on_delete=models.PROTECT, related_name="comentarios"
+    )
 
     def __str__(self):
         return f"{self.usuario} ({self.planta})"

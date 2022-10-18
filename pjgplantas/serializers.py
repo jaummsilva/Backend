@@ -1,3 +1,4 @@
+from dataclasses import fields
 from pyexpat import model
 from rest_framework.serializers import ModelSerializer, SlugRelatedField
 from rest_framework import serializers
@@ -20,8 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=50, min_length=6)
     username = serializers.CharField(max_length=50, min_length=6)
     password = serializers.CharField(max_length=150, write_only=True)
-    password_confirmation = serializers.CharField(
-        max_length=150, write_only=True)
+    password_confirmation = serializers.CharField(max_length=150, write_only=True)
 
     class Meta:
         model = User
@@ -45,11 +45,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 {"password": ("passwords does not match")}
             )
         if User.objects.filter(email=email).exists():
-            raise serializers.ValidationError(
-                {"email": ("email already exists")})
+            raise serializers.ValidationError({"email": ("email already exists")})
         if User.objects.filter(username=username).exists():
-            raise serializers.ValidationError(
-                {"username": ("username already exists")})
+            raise serializers.ValidationError({"username": ("username already exists")})
 
         return super().validate(args)
 
@@ -71,6 +69,14 @@ class PlantaSerializer(ModelSerializer):
         write_only=True,
     )
     imagem = ImageSerializer(required=False, read_only=True)
+
+
+# class PlantaDetailSerializer(ModelSerializer):
+#     comentarios = PlantaSerializer(source="comentarios_set", many=True)
+
+#     class Meta:
+#         model = Comentario
+#         fields = ("comentarios",)
 
 
 class BoletoSerializer(ModelSerializer):
@@ -106,11 +112,11 @@ class ItensCarrinhoSerializer(ModelSerializer):
 class ComentarioSerializer(ModelSerializer):
     class Meta:
         model = Comentario
-        fields = ("id","texto", "usuario", "planta")
+        fields = ("id", "texto", "usuario", "planta")
 
 
 class ComentarioDetailSerializer(ModelSerializer):
     class Meta:
         model = Comentario
-        fields = ("id","texto", "usuario", "planta")
+        fields = ("id", "texto", "usuario", "planta")
         depth = 1
