@@ -41,7 +41,7 @@ class Cartao(models.Model):
 
 class Pix(models.Model):
     banco = models.CharField(max_length=50)
-    cnpj = models.CharField(max_length=14)
+    cnpj = models.CharField(max_length=18)
     email = models.EmailField()
 
     def __str__(self):
@@ -50,14 +50,18 @@ class Pix(models.Model):
 
 class PedidoCarrinho(models.Model):
     valor = models.DecimalField(max_digits=9, decimal_places=2)
-    quantidade_itens = models.IntegerField()
     dth = models.DateTimeField()
+    cpf = models.CharField(max_length=14)
+    rg = models.CharField(max_length=9)
+    endereco = models.CharField(max_length=150)
+    complemento = models.CharField(max_length=100)
     boleto1 = models.ForeignKey(Boleto, on_delete=models.PROTECT, blank=True, null=True)
     cartao1 = models.ForeignKey(Cartao, on_delete=models.PROTECT, blank=True, null=True)
     pix = models.ForeignKey(Pix, on_delete=models.PROTECT, blank=True, null=True)
+    usuario = models.ForeignKey(User,on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"{self.pedido} ({self.valor})"
+        return f"{self.usuario} ({self.valor})"
 
 
 class ItensCarrinho(models.Model):
@@ -67,8 +71,6 @@ class ItensCarrinho(models.Model):
     pedido = models.ForeignKey(PedidoCarrinho, on_delete=models.PROTECT)
     preco = models.DecimalField(max_digits=8, decimal_places=2)
     qnt_item = models.IntegerField()
-    endereco = models.CharField(max_length=200)
-    complemento = models.CharField(max_length=50)
 
 
 class Comentario(models.Model):
