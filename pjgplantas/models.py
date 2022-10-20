@@ -31,9 +31,10 @@ class Boleto(models.Model):
 
 class Cartao(models.Model):
     numero = models.CharField(max_length=19)
-    cvv = models.IntegerField()
-    validade = models.DateField()
+    cvv = models.CharField(max_length=3)
+    validade = models.CharField(max_length=5)
     nometitular = models.CharField(max_length=100)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.nometitular} ({self.numero})"
@@ -58,7 +59,7 @@ class PedidoCarrinho(models.Model):
     boleto1 = models.ForeignKey(Boleto, on_delete=models.PROTECT, blank=True, null=True)
     cartao1 = models.ForeignKey(Cartao, on_delete=models.PROTECT, blank=True, null=True)
     pix = models.ForeignKey(Pix, on_delete=models.PROTECT, blank=True, null=True)
-    usuario = models.ForeignKey(User,on_delete=models.PROTECT)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.usuario} ({self.valor})"
