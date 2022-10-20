@@ -55,6 +55,17 @@ class RegistrationSerializer(serializers.ModelSerializer):
         validated_data.pop("password_confirmation")
         return User.objects.create_user(**validated_data)
 
+class ComentarioSerializer(ModelSerializer):
+    class Meta:
+        model = Comentario
+        fields = ("id", "texto", "usuario", "planta")
+
+
+class ComentarioEmPlantaSerializer(ModelSerializer):
+    usuario = serializers.CharField(source='usuario.username')
+    class Meta:
+        model = Comentario
+        fields = ("id", "texto", "usuario")
 
 class PlantaSerializer(ModelSerializer):
     class Meta:
@@ -69,6 +80,7 @@ class PlantaSerializer(ModelSerializer):
         write_only=True,
     )
     imagem = ImageSerializer(required=False, read_only=True)
+    comentarios = ComentarioEmPlantaSerializer(many=True, read_only=True)
 
 
 # class PlantaDetailSerializer(ModelSerializer):
@@ -109,10 +121,7 @@ class ItensCarrinhoSerializer(ModelSerializer):
         fields = "__all__"
 
 
-class ComentarioSerializer(ModelSerializer):
-    class Meta:
-        model = Comentario
-        fields = ("id", "texto", "usuario", "planta")
+
 
 
 class ComentarioDetailSerializer(ModelSerializer):
