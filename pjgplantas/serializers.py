@@ -131,7 +131,7 @@ class PedidoSerializer(ModelSerializer):
 class ItensCarrinhoSerializer(ModelSerializer):
     class Meta:
         model = ItensCarrinho
-        fields = "__all__"
+        fields = ("id", "planta", "preco")
 
 
 class ComentarioDetailSerializer(ModelSerializer):

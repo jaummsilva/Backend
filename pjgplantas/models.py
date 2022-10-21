@@ -49,8 +49,14 @@ class Pix(models.Model):
         return self.banco
 
 
+class ItensCarrinho(models.Model):
+    planta = models.ManyToManyField(
+        Planta,
+    )
+    preco = models.DecimalField(max_digits=9, decimal_places=2)
+
+
 class PedidoCarrinho(models.Model):
-    valor = models.DecimalField(max_digits=9, decimal_places=2)
     dth = models.DateTimeField()
     cpf = models.CharField(max_length=14)
     rg = models.CharField(max_length=9)
@@ -60,18 +66,10 @@ class PedidoCarrinho(models.Model):
     cartao1 = models.ForeignKey(Cartao, on_delete=models.PROTECT, blank=True, null=True)
     pix = models.ForeignKey(Pix, on_delete=models.PROTECT, blank=True, null=True)
     usuario = models.ForeignKey(User, on_delete=models.PROTECT)
+    itenscarrinho = models.ForeignKey(ItensCarrinho, on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"{self.usuario} ({self.valor})"
-
-
-class ItensCarrinho(models.Model):
-    planta = models.ManyToManyField(
-        Planta,
-    )
-    pedido = models.ForeignKey(PedidoCarrinho, on_delete=models.PROTECT)
-    preco = models.DecimalField(max_digits=8, decimal_places=2)
-    qnt_item = models.IntegerField()
+        return f"{self.usuario} ({self.cpf})"
 
 
 class Comentario(models.Model):
