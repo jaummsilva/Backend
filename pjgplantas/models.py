@@ -54,6 +54,10 @@ class ItensCarrinho(models.Model):
         Planta,
     )
     preco = models.DecimalField(max_digits=9, decimal_places=2)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.usuario} ({self.planta})"
 
 
 class PedidoCarrinho(models.Model):
@@ -65,11 +69,12 @@ class PedidoCarrinho(models.Model):
     boleto1 = models.ForeignKey(Boleto, on_delete=models.PROTECT, blank=True, null=True)
     cartao1 = models.ForeignKey(Cartao, on_delete=models.PROTECT, blank=True, null=True)
     pix = models.ForeignKey(Pix, on_delete=models.PROTECT, blank=True, null=True)
-    usuario = models.ForeignKey(User, on_delete=models.PROTECT)
-    itenscarrinho = models.ForeignKey(ItensCarrinho, on_delete=models.PROTECT)
+    itenscarrinho = models.ForeignKey(
+        ItensCarrinho, on_delete=models.PROTECT, related_name="itens"
+    )
 
     def __str__(self):
-        return f"{self.usuario} ({self.cpf})"
+        return f"{self.itenscarrinho} ({self.cpf})"
 
 
 class Comentario(models.Model):

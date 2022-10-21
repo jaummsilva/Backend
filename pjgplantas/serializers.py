@@ -86,14 +86,6 @@ class PlantaSerializer(ModelSerializer):
     comentarios = ComentarioEmPlantaSerializer(many=True, read_only=True)
 
 
-# class PlantaDetailSerializer(ModelSerializer):
-#     comentarios = PlantaSerializer(source="comentarios_set", many=True)
-
-#     class Meta:
-#         model = Comentario
-#         fields = ("comentarios",)
-
-
 class BoletoSerializer(ModelSerializer):
     class Meta:
         model = Boleto
@@ -112,26 +104,26 @@ class PixSerializer(ModelSerializer):
         fields = "__all__"
 
 
-class PedidoSerializer(ModelSerializer):
-    class Meta:
-        model = PedidoCarrinho
-        fields = (
-            "valor",
-            "cpf",
-            "rg",
-            "endereco",
-            "complemento",
-            "boleto1",
-            "cartao1",
-            "pix",
-            "usuario",
-        )
-
-
 class ItensCarrinhoSerializer(ModelSerializer):
+    usuario = serializers.CharField(source="usuario.username")
+    preco = serializers.SerializerMethodField()
+
     class Meta:
         model = ItensCarrinho
-        fields = ("id", "planta", "preco")
+        fields = "__all__"
+        depth = 2
+
+    def get_preco(self, instance):
+        return instance.planta.preco + instance.planta.preco
+
+
+class PedidoSerializer(ModelSerializer):
+    itens = ItensCarrinhoSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = PedidoCarrinho
+        fields = "__all__"
+        depth = 2
 
 
 class ComentarioDetailSerializer(ModelSerializer):
