@@ -58,6 +58,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
         validated_data.pop("password_confirmation")
         return User.objects.create_user(**validated_data)
 
+    def patch(self, args):
+
+        args.get("email", None)
+        args.get("username", None)
+        args.get("password")
+        args.get("password_confirmation")
+
+        return super().validate(args)
+
 
 class ComentarioSerializer(ModelSerializer):
     class Meta:
