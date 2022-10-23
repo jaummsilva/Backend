@@ -5,16 +5,23 @@ from pjgplantas.models import (
     Boleto,
     Cartao,
     Comentario,
-    ItensCarrinho,
-    PedidoCarrinho,
     Pix,
     Planta,
+    Compra,
+    ItensCompra
 )
 
 admin.site.register(Planta)
 admin.site.register(Boleto)
 admin.site.register(Cartao)
 admin.site.register(Pix)
-admin.site.register(ItensCarrinho)
-admin.site.register(PedidoCarrinho)
 admin.site.register(Comentario)
+
+
+class ItensInline(admin.TabularInline):
+    model = ItensCompra
+
+
+@admin.register(Compra)
+class CompraAdmin(admin.ModelAdmin):
+    inlines = (ItensInline,)

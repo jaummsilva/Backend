@@ -6,21 +6,20 @@ from pjgplantas.models import (
     Boleto,
     Cartao,
     Comentario,
-    ItensCarrinho,
-    PedidoCarrinho,
     Pix,
     Planta,
+    Compra
 )
 from pjgplantas.serializers import (
     BoletoSerializer,
     CartaoSerializer,
     ComentarioSerializer,
-    ItensCarrinhoSerializer,
-    PedidoSerializer,
     PixSerializer,
     PlantaSerializer,
     RegistrationSerializer,
     ComentarioDetailSerializer,
+    CriarEditarCompraSerializer,
+    CompraSerializer
 )
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -51,11 +50,6 @@ class RegistrationViewSet(ModelViewSet):
 class PlantaViewSet(ModelViewSet):
     queryset = Planta.objects.all()
     serializer_class = PlantaSerializer
-    
-    # def get_serializer_class(self):
-    #     if self.action in ["list", "retrieve"]:
-    #         return PlantaDetailSerializer
-    #     return PlantaSerializer
 
 
 class BoletoViewSet(ModelViewSet):
@@ -73,16 +67,6 @@ class PixViewSet(ModelViewSet):
     serializer_class = PixSerializer
 
 
-class PedidoViewSet(ModelViewSet):
-    queryset = PedidoCarrinho.objects.all()
-    serializer_class = PedidoSerializer
-
-
-class ItensCarrinhoViewSet(ModelViewSet):
-    queryset = ItensCarrinho.objects.all()
-    serializer_class = ItensCarrinhoSerializer
-
-
 class ComentarioViewSet(ModelViewSet):
     queryset = Comentario.objects.all()
 
@@ -90,3 +74,18 @@ class ComentarioViewSet(ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return ComentarioDetailSerializer
         return ComentarioSerializer
+
+
+class CompraViewSet(ModelViewSet):
+    queryset = Compra.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == "list" or self.action == "retrieve":
+            return CompraSerializer
+        return CriarEditarCompraSerializer
+
+    def get_queryset(self):
+        usuario = self.request.user
+        if usuario.groups.filter(name="Administradores"):
+            return Compra.objects.all()
+        return Compra.objects.filter(usuario=usuario)

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from media.models import Image
 from django.utils import timezone
+from django.db.models import F
 
 
 class Planta(models.Model):
@@ -49,34 +50,6 @@ class Pix(models.Model):
         return self.banco
 
 
-class ItensCarrinho(models.Model):
-    planta = models.ManyToManyField(
-        Planta,
-    )
-    preco = models.DecimalField(max_digits=9, decimal_places=2)
-    usuario = models.ForeignKey(User, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return f"{self.usuario} ({self.planta})"
-
-
-class PedidoCarrinho(models.Model):
-    dth = models.DateTimeField()
-    cpf = models.CharField(max_length=14)
-    rg = models.CharField(max_length=9)
-    endereco = models.CharField(max_length=150)
-    complemento = models.CharField(max_length=100)
-    boleto1 = models.ForeignKey(Boleto, on_delete=models.PROTECT, blank=True, null=True)
-    cartao1 = models.ForeignKey(Cartao, on_delete=models.PROTECT, blank=True, null=True)
-    pix = models.ForeignKey(Pix, on_delete=models.PROTECT, blank=True, null=True)
-    itenscarrinho = models.ForeignKey(
-        ItensCarrinho, on_delete=models.PROTECT, related_name="itens"
-    )
-
-    def __str__(self):
-        return f"{self.itenscarrinho} ({self.cpf})"
-
-
 class Comentario(models.Model):
     texto = models.TextField()
     dth = models.DateTimeField(default=timezone.now)
@@ -87,3 +60,33 @@ class Comentario(models.Model):
 
     def __str__(self):
         return f"{self.usuario} ({self.planta})"
+
+
+class Compra(models.Model):
+    usuario = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="compras")
+    cpf = models.CharField(max_length=14)
+    rg = models.CharField(max_length=9)
+    endereco = models.CharField(max_length=150)
+    complemento = models.CharField(max_length=100)
+    boleto = models.ForeignKey(
+        Boleto, on_delete=models.PROTECT, blank=True, null=True)
+    cartao = models.ForeignKey(
+        Cartao, on_delete=models.PROTECT, blank=True, null=True)
+    pix = models.ForeignKey(
+        Pix, on_delete=models.PROTECT, blank=True, null=True)
+
+    @property
+    def total(self):
+        queryset = self.itens.all().aggregate(
+            total=models.Sum(F("quantidade") * F("planta__preco"))
+        )
+        return queryset["total"]
+
+
+class ItensCompra(models.Model):
+    compra = models.ForeignKey(
+        Compra, on_delete=models.CASCADE, related_name="itens")
+    planta = models.ForeignKey(
+        Planta, on_delete=models.PROTECT, related_name="+")
+    quantidade = models.IntegerField()

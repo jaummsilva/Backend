@@ -1,18 +1,23 @@
-"""backend URL Configuration
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
+from pjgplantas.views import (
+    BoletoViewSet,
+    CartaoViewSet,
+    ComentarioViewSet,
+    PixViewSet,
+    PlantaViewSet,
+    RegistrationViewSet,
+    MyTokenObtainPairView,
+    CompraViewSet
+)
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
+from rest_framework.routers import DefaultRouter
 from django.contrib import admin
 from django.urls import include, path
 from media.router import router as media_router
@@ -21,39 +26,15 @@ from django.conf.urls.static import static
 
 path("api/media/", include(media_router.urls)),
 
-from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import (
-    # TokenObtainPairView,
-    TokenRefreshView,
-)
-
-
-from pjgplantas.views import (
-    BoletoViewSet,
-    CartaoViewSet,
-    ComentarioViewSet,
-    ItensCarrinhoViewSet,
-    PedidoViewSet,
-    PixViewSet,
-    PlantaViewSet,
-    RegistrationViewSet,
-    MyTokenObtainPairView,
-)
-from drf_spectacular.views import (
-    SpectacularAPIView,
-    SpectacularRedocView,
-    SpectacularSwaggerView,
-)
 
 router = DefaultRouter()
 router.register(r"plantas", PlantaViewSet)
 router.register(r"boletos", BoletoViewSet)
 router.register(r"cartaos", CartaoViewSet)
 router.register(r"pixs", PixViewSet)
-router.register(r"pedidos", PedidoViewSet)
-router.register(r"itens", ItensCarrinhoViewSet)
 router.register(r"comentarios", ComentarioViewSet)
 router.register(r"auth", RegistrationViewSet)
+router.register(r"compras", CompraViewSet)
 
 
 urlpatterns = [
@@ -74,4 +55,5 @@ urlpatterns = [
     ),
 ]
 
-urlpatterns += static(settings.MEDIA_ENDPOINT, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_ENDPOINT,
+                      document_root=settings.MEDIA_ROOT)
