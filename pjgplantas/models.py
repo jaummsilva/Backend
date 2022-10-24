@@ -82,6 +82,13 @@ class Compra(models.Model):
             total=models.Sum(F("quantidade") * F("planta__preco"))
         )
         return queryset["total"]
+    
+    @property
+    def total_compra(self):
+        queryset = self.itens.all().aggregate(
+            total=models.Sum(F("total") + F("total"))
+        )
+        return queryset["total_compra"]
 
 
 class ItensCompra(models.Model):

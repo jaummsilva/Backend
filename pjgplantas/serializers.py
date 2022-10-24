@@ -58,15 +58,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
         validated_data.pop("password_confirmation")
         return User.objects.create_user(**validated_data)
 
-    def patch(self, args):
+    def update(self, instance, validated_data):
 
-        args.get("email", None)
-        args.get("username", None)
-        args.get("password")
-        args.get("password_confirmation")
+        password = validated_data.pop('password', None)
 
-        return super().validate(args)
+        for (key, value) in validated_data.items():
+            setattr(instance, key, value)
 
+        if password is not None:
+            instance.set_password(password)
+
+        instance.save()
+
+        return instance
 
 class ComentarioSerializer(ModelSerializer):
     class Meta:
@@ -128,20 +132,24 @@ class ItensCompraSerializer(ModelSerializer):
 
     class Meta:
         model = ItensCompra
-        fields = ("planta", "quantidade", "total")
+        fields = ("planta", "quantidade", "total",)
         depth = 2
 
     def get_total(self, instance):
-        return instance.quantidade * instance.livro.preco
+        return instance.quantidade * instance.planta.preco
+    
+    def get_total_compra(self,instance):
+        return instance.total + instance.total
+
 
 
 class CompraSerializer(ModelSerializer):
-    usuario = serializers.CharField(source="usuario.email")
+    usuario = serializers.CharField(source="usuario.username")
     itens = ItensCompraSerializer(many=True)
 
     class Meta:
         model = Compra
-        fields = ("id", "usuario", "itens", "total")
+        fields = "__all__"
 
 
 class CriarEditarItensCompraSerializer(ModelSerializer):

@@ -47,6 +47,12 @@ class RegistrationViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = RegistrationSerializer
 
+    def update(self, request, *args, **kwargs):
+        serializer = self.serializer_class(request.user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class PlantaViewSet(ModelViewSet):
     queryset = Planta.objects.all()
