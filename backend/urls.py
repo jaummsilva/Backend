@@ -1,4 +1,4 @@
-
+from pjgplantas.views import  ChangePasswordView
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -12,7 +12,7 @@ from pjgplantas.views import (
     PlantaViewSet,
     RegistrationViewSet,
     MyTokenObtainPairView,
-    CompraViewSet
+    CompraViewSet,
 )
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -53,6 +53,7 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
+    path('change_password/<int:pk>/', ChangePasswordView.as_view(), name='auth_change_password'),
 ]
 
 urlpatterns += static(settings.MEDIA_ENDPOINT,

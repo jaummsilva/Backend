@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import User
+from rest_framework import generics
 
 from pjgplantas.models import (
     Boleto,
@@ -13,6 +14,7 @@ from pjgplantas.models import (
 from pjgplantas.serializers import (
     BoletoSerializer,
     CartaoSerializer,
+    ChangePasswordSerializer,
     ComentarioSerializer,
     PixSerializer,
     PlantaSerializer,
@@ -47,12 +49,15 @@ class RegistrationViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = RegistrationSerializer
 
-    def update(self, request, *args, **kwargs):
-        serializer = self.serializer_class(request.user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class ChangePasswordView(generics.UpdateAPIView):
 
+    queryset = User.objects.all()
+    serializer_class = ChangePasswordSerializer
+
+class ChangePasswordViewSet(ModelViewSet):
+
+    queryset = User.objects.all()
+    serializer_class = ChangePasswordSerializer
 
 class PlantaViewSet(ModelViewSet):
     queryset = Planta.objects.all()
