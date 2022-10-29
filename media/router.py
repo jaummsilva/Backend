@@ -5,5 +5,5 @@ from media import views
 app_name = "media"
 
 router = DefaultRouter()
-router.register("images", views.ImageUploadViewSet)
+router.register("imagesUpload", views.ImageUploadViewSet)
 router.register("documents", views.DocumentUploadViewSet)
