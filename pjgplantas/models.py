@@ -55,7 +55,7 @@ class Comentario(models.Model):
     dth = models.DateTimeField(default=timezone.now)
     usuario = models.ForeignKey(User, on_delete=models.PROTECT)
     planta = models.ForeignKey(
-        Planta, on_delete=models.PROTECT, related_name="comentarios"
+        Planta, on_delete=models.CASCADE, related_name="comentarios"
     )
 
     def __str__(self):
@@ -82,7 +82,7 @@ class Compra(models.Model):
             total=models.Sum(F("quantidade") * F("planta__preco"))
         )
         return queryset["total"]
-    
+
     @property
     def total_compra(self):
         queryset = self.itens.all().aggregate(
@@ -95,5 +95,5 @@ class ItensCompra(models.Model):
     compra = models.ForeignKey(
         Compra, on_delete=models.CASCADE, related_name="itens")
     planta = models.ForeignKey(
-        Planta, on_delete=models.PROTECT, related_name="+")
+        Planta, on_delete=models.CASCADE, related_name="+")
     quantidade = models.IntegerField()
