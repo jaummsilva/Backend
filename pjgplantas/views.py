@@ -2,14 +2,7 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import User
 
-from pjgplantas.models import (
-    Boleto,
-    Cartao,
-    Comentario,
-    Pix,
-    Planta,
-    Compra
-)
+from pjgplantas.models import Boleto, Cartao, Comentario, Pix, Planta, Compra
 from pjgplantas.serializers import (
     BoletoSerializer,
     CartaoSerializer,
@@ -19,7 +12,7 @@ from pjgplantas.serializers import (
     RegistrationSerializer,
     ComentarioDetailSerializer,
     CriarEditarCompraSerializer,
-    CompraSerializer
+    CompraSerializer,
 )
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -86,8 +79,8 @@ class CompraViewSet(ModelViewSet):
             return CompraSerializer
         return CriarEditarCompraSerializer
 
-    def get_queryset(self):
-        usuario = self.request.user
-        if usuario.groups.filter(name="Administradores"):
-            return Compra.objects.all()
-        return Compra.objects.filter(usuario=usuario)
+    # def get_queryset(self):
+    #     usuario = self.request.user
+    #     # if usuario.groups.filter(name="Administradores"):
+    #     #     return Compra.objects.all()
+    #     return Compra.objects.filter(usuario=usuario)

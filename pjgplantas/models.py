@@ -63,18 +63,14 @@ class Comentario(models.Model):
 
 
 class Compra(models.Model):
-    usuario = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="compras")
-    cpf = models.CharField(max_length=14)
-    rg = models.CharField(max_length=9)
-    endereco = models.CharField(max_length=150)
-    complemento = models.CharField(max_length=100)
-    boleto = models.ForeignKey(
-        Boleto, on_delete=models.PROTECT, blank=True, null=True)
-    cartao = models.ForeignKey(
-        Cartao, on_delete=models.PROTECT, blank=True, null=True)
-    pix = models.ForeignKey(
-        Pix, on_delete=models.PROTECT, blank=True, null=True)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT, related_name="compras")
+    cpf = models.CharField(max_length=14, null=True)
+    rg = models.CharField(max_length=9, null=True)
+    endereco = models.CharField(max_length=150, null=True)
+    complemento = models.CharField(max_length=100, null=True)
+    boleto = models.ForeignKey(Boleto, on_delete=models.PROTECT, blank=True, null=True)
+    cartao = models.ForeignKey(Cartao, on_delete=models.PROTECT, blank=True, null=True)
+    pix = models.ForeignKey(Pix, on_delete=models.PROTECT, blank=True, null=True)
 
     @property
     def total(self):
@@ -85,15 +81,11 @@ class Compra(models.Model):
 
     @property
     def total_compra(self):
-        queryset = self.itens.all().aggregate(
-            total=models.Sum(F("total") + F("total"))
-        )
+        queryset = self.itens.all().aggregate(total=models.Sum(F("total") + F("total")))
         return queryset["total_compra"]
 
 
 class ItensCompra(models.Model):
-    compra = models.ForeignKey(
-        Compra, on_delete=models.CASCADE, related_name="itens")
-    planta = models.ForeignKey(
-        Planta, on_delete=models.CASCADE, related_name="+")
+    compra = models.ForeignKey(Compra, on_delete=models.CASCADE, related_name="itens")
+    planta = models.ForeignKey(Planta, on_delete=models.CASCADE, related_name="+")
     quantidade = models.IntegerField()

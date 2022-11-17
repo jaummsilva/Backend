@@ -11,7 +11,7 @@ from pjgplantas.models import (
     Pix,
     Planta,
     Compra,
-    ItensCompra
+    ItensCompra,
 )
 
 from django.contrib.auth.models import User
@@ -22,8 +22,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=50, min_length=6)
     username = serializers.CharField(max_length=50, min_length=6)
     password = serializers.CharField(max_length=150, write_only=True)
-    password_confirmation = serializers.CharField(
-        max_length=150, write_only=True)
+    password_confirmation = serializers.CharField(max_length=150, write_only=True)
 
     class Meta:
         model = User
@@ -114,7 +113,11 @@ class ItensCompraSerializer(ModelSerializer):
 
     class Meta:
         model = ItensCompra
-        fields = ("planta", "quantidade", "total",)
+        fields = (
+            "planta",
+            "quantidade",
+            "total",
+        )
         depth = 2
 
     def get_total(self, instance):
@@ -138,12 +141,12 @@ class CriarEditarItensCompraSerializer(ModelSerializer):
         model = ItensCompra
         fields = ("planta", "quantidade")
 
-    def validate(self, data):
-        if data['quantidade'] > data['planta'].quantidade:
-            raise serializers.ValidationError({
-                'quantidade': 'Quantidade solicitada não disponível em estoque'
-            })
-        return data
+    # def validate(self, data):
+    #     if data["quantidade"] > data["planta"].quantidade:
+    #         raise serializers.ValidationError(
+    #             {"quantidade": "Quantidade solicitada não disponível em estoque"}
+    #         )
+    #     return data
 
 
 class CriarEditarCompraSerializer(ModelSerializer):
@@ -165,7 +168,7 @@ class CriarEditarCompraSerializer(ModelSerializer):
     def update(sef, instance, validated_data):
         itens = validated_data.pop("itens")
         if itens:
-            instance.itens.all().delete()
+            # instance.itens.all().delete()
             for item in itens:
                 ItensCompra.objects.create(compra=instance, **item)
             instance.save()
