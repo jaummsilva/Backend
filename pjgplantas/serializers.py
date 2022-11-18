@@ -73,7 +73,7 @@ class PlantaSerializer(ModelSerializer):
         fields = "__all__"
 
     imagem_attachment_key = SlugRelatedField(
-        source="capa",
+        source="imagem",
         queryset=Image.objects.all(),
         slug_field="attachment_key",
         required=False,
