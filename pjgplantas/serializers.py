@@ -118,7 +118,7 @@ class ItensCompraSerializer(ModelSerializer):
             "quantidade",
             "total",
         )
-        depth = 2
+        depth = 3
 
     def get_total(self, instance):
         return instance.quantidade * instance.planta.preco
@@ -141,13 +141,6 @@ class CriarEditarItensCompraSerializer(ModelSerializer):
         model = ItensCompra
         fields = ("planta", "quantidade")
 
-    # def validate(self, data):
-    #     if data["quantidade"] > data["planta"].quantidade:
-    #         raise serializers.ValidationError(
-    #             {"quantidade": "Quantidade solicitada não disponível em estoque"}
-    #         )
-    #     return data
-
 
 class CriarEditarCompraSerializer(ModelSerializer):
     itens = CriarEditarItensCompraSerializer(many=True)
@@ -165,10 +158,9 @@ class CriarEditarCompraSerializer(ModelSerializer):
         compra.save()
         return compra
 
-    def update(sef, instance, validated_data):
+    def update(self, instance, validated_data):
         itens = validated_data.pop("itens")
         if itens:
-            # instance.itens.all().delete()
             for item in itens:
                 ItensCompra.objects.create(compra=instance, **item)
             instance.save()
