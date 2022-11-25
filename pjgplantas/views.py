@@ -20,6 +20,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
     def validate(self, attrs):
         data = super().validate(attrs)
         data["username"] = self.user.username
@@ -29,6 +30,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data["id"] = self.user.id
         data["password"] = self.user.password
         data["is_superuser"] = self.user.is_superuser
+        data["compras"] = self.user.compras.all()
 
         return data
 

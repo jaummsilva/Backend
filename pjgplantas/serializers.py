@@ -17,12 +17,82 @@ from pjgplantas.models import (
 from django.contrib.auth.models import User
 
 
+class ItensCompraSerializer(ModelSerializer):
+    total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ItensCompra
+        fields = (
+            "planta",
+            "quantidade",
+            "total",
+        )
+        depth = 2
+
+    def get_total(self, instance):
+        return instance.quantidade * instance.planta.preco
+
+    def get_total_compra(self, instance):
+        return instance.total + instance.total
+
+
+class CompraSerializer(ModelSerializer):
+    usuario = serializers.CharField(source="usuario.username")
+    itens = ItensCompraSerializer(many=True)
+
+    class Meta:
+        model = Compra
+        fields = "__all__"
+
+
+class CompraEmUsuarioSerializer(ModelSerializer):
+    usuario = serializers.CharField(source="usuario.username")
+    itens = ItensCompraSerializer(many=True)
+
+    class Meta:
+        model = Compra
+        fields = ("id")
+
+
+class CriarEditarItensCompraSerializer(ModelSerializer):
+    class Meta:
+        model = ItensCompra
+        fields = ("planta", "quantidade")
+
+
+class CriarEditarCompraSerializer(ModelSerializer):
+    itens = CriarEditarItensCompraSerializer(many=True)
+    usuario = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Compra
+        fields = ("id", "usuario", "itens")
+
+    def create(self, validated_data):
+        itens = validated_data.pop("itens")
+        compra = Compra.objects.create(**validated_data)
+        for item in itens:
+            ItensCompra.objects.create(compra=compra, **item)
+        compra.save()
+        return compra
+
+    def update(self, instance, validated_data):
+        itens = validated_data.pop("itens")
+        if itens:
+            for item in itens:
+                ItensCompra.objects.create(compra=instance, **item)
+            instance.save()
+        return instance
+
+
 class RegistrationSerializer(serializers.ModelSerializer):
 
     email = serializers.EmailField(max_length=50, min_length=6)
     username = serializers.CharField(max_length=50, min_length=6)
     password = serializers.CharField(max_length=150, write_only=True)
-    password_confirmation = serializers.CharField(max_length=150, write_only=True)
+    password_confirmation = serializers.CharField(
+        max_length=150, write_only=True)
+    compras = CompraEmUsuarioSerializer()
 
     class Meta:
         model = User
@@ -34,6 +104,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             "username",
             "password",
             "password_confirmation",
+            "compras"
         )
 
     def validate(self, args):
@@ -106,62 +177,3 @@ class ComentarioDetailSerializer(ModelSerializer):
         model = Comentario
         fields = ("id", "texto", "usuario", "planta")
         depth = 1
-
-
-class ItensCompraSerializer(ModelSerializer):
-    total = serializers.SerializerMethodField()
-
-    class Meta:
-        model = ItensCompra
-        fields = (
-            "planta",
-            "quantidade",
-            "total",
-        )
-        depth = 3
-
-    def get_total(self, instance):
-        return instance.quantidade * instance.planta.preco
-
-    def get_total_compra(self, instance):
-        return instance.total + instance.total
-
-
-class CompraSerializer(ModelSerializer):
-    usuario = serializers.CharField(source="usuario.username")
-    itens = ItensCompraSerializer(many=True)
-
-    class Meta:
-        model = Compra
-        fields = "__all__"
-
-
-class CriarEditarItensCompraSerializer(ModelSerializer):
-    class Meta:
-        model = ItensCompra
-        fields = ("planta", "quantidade")
-
-
-class CriarEditarCompraSerializer(ModelSerializer):
-    itens = CriarEditarItensCompraSerializer(many=True)
-    usuario = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
-    class Meta:
-        model = Compra
-        fields = ("id", "usuario", "itens")
-
-    def create(self, validated_data):
-        itens = validated_data.pop("itens")
-        compra = Compra.objects.create(**validated_data)
-        for item in itens:
-            ItensCompra.objects.create(compra=compra, **item)
-        compra.save()
-        return compra
-
-    def update(self, instance, validated_data):
-        itens = validated_data.pop("itens")
-        if itens:
-            for item in itens:
-                ItensCompra.objects.create(compra=instance, **item)
-            instance.save()
-        return instance
