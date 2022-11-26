@@ -46,12 +46,10 @@ class CompraSerializer(ModelSerializer):
 
 
 class CompraEmUsuarioSerializer(ModelSerializer):
-    usuario = serializers.CharField(source="usuario.username")
-    itens = ItensCompraSerializer(many=True)
 
     class Meta:
         model = Compra
-        fields = ("id")
+        fields = ("id",)
 
 
 class CriarEditarItensCompraSerializer(ModelSerializer):
@@ -92,7 +90,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=150, write_only=True)
     password_confirmation = serializers.CharField(
         max_length=150, write_only=True)
-    compras = CompraEmUsuarioSerializer()
+    compras = CompraEmUsuarioSerializer(many=True)
 
     class Meta:
         model = User
