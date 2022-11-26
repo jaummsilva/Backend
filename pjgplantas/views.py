@@ -30,7 +30,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data["id"] = self.user.id
         data["password"] = self.user.password
         data["is_superuser"] = self.user.is_superuser
-        data["compras"] = self.user.compras.all()
 
         return data
 
