@@ -64,7 +64,7 @@ class Comentario(models.Model):
 
 class Compra(models.Model):
     usuario = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="compras")
+        User, on_delete=models.PROTECT, related_name="compras",null=True, blank=True)
     cpf = models.CharField(max_length=14, null=True)
     rg = models.CharField(max_length=9, null=True)
     endereco = models.CharField(max_length=150, null=True)
