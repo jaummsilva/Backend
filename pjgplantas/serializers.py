@@ -84,7 +84,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=150, write_only=True)
     password_confirmation = serializers.CharField(
         max_length=150, write_only=True)
-    compras = CompraSerializer(many=True)
+    compras = CompraSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
