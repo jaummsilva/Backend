@@ -37,19 +37,13 @@ class ItensCompraSerializer(ModelSerializer):
 
 
 class CompraSerializer(ModelSerializer):
-    usuario = serializers.CharField(source="usuario.username")
+    usuario = serializers.IntegerField(source="usuario.id")
     itens = ItensCompraSerializer(many=True)
 
     class Meta:
         model = Compra
         fields = "__all__"
 
-
-class CompraEmUsuarioSerializer(ModelSerializer):
-
-    class Meta:
-        model = Compra
-        fields = ("id",)
 
 
 class CriarEditarItensCompraSerializer(ModelSerializer):
@@ -90,7 +84,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=150, write_only=True)
     password_confirmation = serializers.CharField(
         max_length=150, write_only=True)
-    compras = CompraEmUsuarioSerializer(many=True,read_only=True)
+    compras = CompraSerializer(many=True)
 
     class Meta:
         model = User
