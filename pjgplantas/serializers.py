@@ -96,7 +96,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
             "username",
             "password",
             "password_confirmation",
-            "compras"
+            "compras",
+            "is_superuser"
         )
 
     def validate(self, args):
